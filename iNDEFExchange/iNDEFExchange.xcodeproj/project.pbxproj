@@ -16,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7591875F259AC16300679F95 /* iNDEFExchange.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iNDEFExchange.entitlements; sourceTree = "<group>"; };
 		75C414B22599DAE8001751A5 /* iNDEFExchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iNDEFExchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C414B52599DAE8001751A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75C414B72599DAE9001751A5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -56,6 +57,7 @@
 		75C414B42599DAE8001751A5 /* iNDEFExchange */ = {
 			isa = PBXGroup;
 			children = (
+				7591875F259AC16300679F95 /* iNDEFExchange.entitlements */,
 				75C414B52599DAE8001751A5 /* AppDelegate.swift */,
 				75C414B72599DAE9001751A5 /* SceneDelegate.swift */,
 				75C414B92599DAE9001751A5 /* ViewController.swift */,
@@ -286,7 +288,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = iNDEFExchange/iNDEFExchange.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 97BD48DZC7;
 				INFOPLIST_FILE = iNDEFExchange/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -295,6 +300,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = tw.com.BurceHuang.iNDEFExchange;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -305,7 +311,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = iNDEFExchange/iNDEFExchange.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 97BD48DZC7;
 				INFOPLIST_FILE = iNDEFExchange/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -314,6 +323,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = tw.com.BurceHuang.iNDEFExchange;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
