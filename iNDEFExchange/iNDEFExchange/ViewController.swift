@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     
     private var tagReaderSession: NFCTagReaderSession?
     
-    private let tagMode: TagReadMode = .general
+    private let tagMode: TagReadMode = .polling
     
     private var currentInfo: String {
         return self.infoLabel?.text ?? ""
@@ -242,22 +242,52 @@ extension ViewController: NFCTagReaderSessionDelegate {
     }
     
     private func detectedTag(session: NFCTagReaderSession, tag: NFCTag, ndefTag: NFCISO7816Tag) {
-        print("iso7816")
+        print("iso7816, aid = \(ndefTag.initialSelectedAID)")
+        
+        let tagUIDData = ndefTag.identifier
+        var byteData: [UInt8] = []
+        tagUIDData.withUnsafeBytes { byteData.append(contentsOf: $0) }
+        var uidString = ""
+        for byte in byteData {
+            let decimalNumber = String(byte, radix: 16)
+            if (Int(decimalNumber) ?? 0) < 10 {
+                uidString.append("0\(decimalNumber)")
+            } else {
+                uidString.append(decimalNumber)
+            }
+        }
+        debugPrint("\(byteData) converted to Tag UID: \(uidString)")
         session.connect(to: tag) { (error) in
             guard error == nil else {
                 session.restartPolling()
                 return
             }
             let myAPDU = NFCISO7816APDU(instructionClass: 0, instructionCode: 0xB0, p1Parameter: 0, p2Parameter: 0, data: Data(), expectedResponseLength: 16)
-            ndefTag.sendCommand(apdu: myAPDU) { (response: Data, sw1: UInt8, sw2: UInt8, error: Error?) in
-                // TODO: 依據資料格式做解析
-                guard error != nil && !(sw1 == 0x90 && sw2 == 0) else {
-                    session.invalidate(errorMessage: "Application failure")
-                    return
+            if #available(iOS 14.0, *) {
+                ndefTag.sendCommand(apdu: myAPDU) { result in
+                    switch result {
+                    case let .success(adpu):
+                        debugPrint(adpu.statusWord1)
+                        debugPrint(adpu.statusWord2)
+                        session.alertMessage = "Tag read success."
+                        session.invalidate()
+                    case let .failure(error):
+                        debugPrint("upper 14 >>> error = \(error.localizedDescription)")
+                        session.invalidate(errorMessage: "Application failure")
+                    }
                 }
-                print(String(data: response, encoding: .utf8) ?? "data is empty!!!")
-                session.alertMessage = "Tag read success."
-                session.invalidate()
+            } else {
+                ndefTag.sendCommand(apdu: myAPDU) { (response: Data, sw1: UInt8, sw2: UInt8, error: Error?) in
+                    // TODO: 依據資料格式做解析
+                    if let error = error {
+                        debugPrint("lower 14 >>> error = \(error.localizedDescription)")
+                        session.invalidate(errorMessage: "Application failure")
+                        return
+                    }
+                    print(String(data: response, encoding: .utf8) ?? "data is empty!!!")
+                    session.alertMessage = "Tag read success."
+                    session.invalidate()
+                }
             }
         }
     }
