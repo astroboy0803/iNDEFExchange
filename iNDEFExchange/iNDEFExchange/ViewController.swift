@@ -36,6 +36,7 @@ class ViewController: UIViewController {
             self.showAlertMessage()
             return
         }
+        self.ndefReaderSession?.invalidate()
         self.ndefReaderSession = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
         self.ndefReaderSession?.alertMessage = "Hold your iPhone near a writable NFC tag to update."
         self.ndefReaderSession?.begin()
@@ -46,6 +47,7 @@ class ViewController: UIViewController {
             self.showAlertMessage()
             return
         }
+        self.tagReaderSession?.invalidate()
         self.tagReaderSession = NFCTagReaderSession(pollingOption: [.iso14443, .iso15693, .iso18092], delegate: self, queue: nil)
         self.tagReaderSession?.alertMessage = "Hold your iPhone near an NFC ............tag."
         self.tagReaderSession?.begin()
@@ -169,7 +171,7 @@ extension ViewController: NFCTagReaderSessionDelegate {
         
         guard tags.count == 1 else {
             session.alertMessage = "More than 1 tags found. Please present only 1 tag."
-            // TODO:
+            session.invalidate()
             return
         }
         
@@ -269,6 +271,7 @@ extension ViewController: NFCTagReaderSessionDelegate {
                     case let .success(adpu):
                         debugPrint(adpu.statusWord1)
                         debugPrint(adpu.statusWord2)
+                        debugPrint(adpu.payload)
                         session.alertMessage = "Tag read success."
                         session.invalidate()
                     case let .failure(error):
